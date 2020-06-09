@@ -1,32 +1,38 @@
 import React from "react";
 import {connect} from 'react-redux'
 import {getPosts} from '../Redux/action'
-import {Card, Row, Col, Divider} from 'antd';
+import {Card, Row, Col, Layout, Menu, Space} from 'antd';
+import { EditOutlined, EllipsisOutlined, DeleteOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
+import ListPosts from "./ListPosts";
+import CreateNewPost from "./CreateNewPost";
 
 
 class Blog extends React.Component {
-
-    componentDidMount() {
-        this.props.getPosts();
+    constructor(props) {
+        super(props);
+        this.state = {
+            selected:1
+        }
     }
-
+    handleClick = e => {
+        this.setState({selected:e})
+    }
     render() {
-        const posts = this.props.posts
-        console.log(posts)
-        return (
-            <Col span={12} offset={6}>
+        const { Header, Footer, Sider, Content } = Layout;
 
-                {posts.map(p => (
-                    <Row gutter={[48, 48]}>
-                        <Col span={24}>
-                        <Card key={p.id} title={p.title} style={{width: '100%'}}>
-                            <p>{p.content}</p>
-                        </Card>
-                        </Col>
-                    </Row>
-                ))}
-            </Col>
+        return (
+            <Layout>
+                <Header>
+                    <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[this.state.selected.toString()]}>
+                        <Menu.Item key="1" onClick={() => this.handleClick(1)}> Read Posts</Menu.Item>
+                        <Menu.Item key="2" onClick={() => this.handleClick(2)}> Create Post</Menu.Item>
+                    </Menu></Header>
+                <Content>
+                        {this.state.selected==1?<ListPosts />: <CreateNewPost />
+                        }
+                </Content>
+            </Layout>
         );
     }
 }

@@ -16,6 +16,9 @@ const postReducer = (state = initialState, action) => {
             return {...state,posts: action.payload};
         }
 
+        case Types.DELETE_POST: {
+            return {...state, posts: state.posts.filter(post => post.id != action.payload)}
+        }
         default:
             return state;
     }
